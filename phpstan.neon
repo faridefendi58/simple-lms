@@ -1,0 +1,17 @@
+#$ composer update --optimize-autoloader
+#$ vendor/bin/phpstan analyze
+
+includes:
+    # @see https://github.com/phpstan/phpstan-src/blob/master/conf/bleedingEdge.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %currentWorkingDirectory%/app
+    excludePaths:
+        - */vendor/*
+    ignoreErrors:
+        - '#uses generic trait#'
+        - '#perPage of method#'
