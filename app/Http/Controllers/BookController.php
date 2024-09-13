@@ -69,6 +69,17 @@ class BookController extends Controller
     }
 
     /**
+     * Show detail resource
+     *
+     * @param Book $book
+     * @return BookResource
+     */
+    public function show(Book $book): BookResource
+    {
+        return new BookResource($book);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Book $book

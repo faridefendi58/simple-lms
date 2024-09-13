@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
+use App\Http\Resources\AuthorResource;
 use App\Http\Resources\BookResource;
 use App\Interfaces\AuthorRepositoryInterface;
 use App\Models\Author;
@@ -65,6 +66,17 @@ class AuthorController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    /**
+     * Show detail resource
+     *
+     * @param Author $author
+     * @return AuthorResource
+     */
+    public function show(Author $author): AuthorResource
+    {
+        return new AuthorResource($author);
     }
 
     /**
