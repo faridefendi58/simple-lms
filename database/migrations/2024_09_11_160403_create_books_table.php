@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable()->default(null);
             $table->date('publish_date')->nullable()->default(null);
-            $table->foreignId('author_id')->constrained('authors');
+            $table->integer('author_id')->nullable()->default(0);
             $table->timestamps();
             // table index
             $table->index('author_id');

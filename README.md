@@ -22,8 +22,8 @@ This section will guide you through setting up and running the Laravel applicati
 
 Prerequisites
 
-- PHP (version 8 or above)
-- Composer (package manager)
+- PHP (version 8.2 or above)
+- Composer (version 2.5.7 or above)
 - MySQL database server
 
 Installation:
@@ -73,5 +73,149 @@ Installation:
 
 ## Interacting with the LMS API
 
-This section provides a comprehensive guide on how to use the Laravel-based frontend application to interact with the LMS API
+This section provides a comprehensive guide on how to use the Laravel-based frontend application to interact with the LMS API. It will cover the following topics:
+1. Token Authentication
+    
+    Both books and authors API require a token in Headers. e.g. 
+    `--header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5"`
+
+    Example API call to get the token
+
+    ```
+    curl --header "Content-Type: application/json" \
+    --request POST \
+    --data '{"email":"test@example.com","password":"12345678"}' \
+    http://127.0.0.1:8000/auth/login
+    ```
+2. Books API
+    Books has 4 endpoints
+    
+    1. `GET /books` : to get the list of books record 
+    2. `POST /books` : to create a new book
+    3. `PUT /books/[id]` : to update the book record
+    4. `DELETE /books/[id]` : to remove the book record
+
+    Example curl request :
+
+    ```
+    # Login to generate the Token
+
+    > curl --header "Content-Type: application/json" \
+    --request POST \
+    --data '{"email":"test@example.com","password":"12345678"}' \
+    http://127.0.0.1:8000/auth/login
+    
+    # Create a new books
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request POST \
+    --data '{"title":"Book Title","description":"This book description","publish_date":"2000-01-01","author_id":1}' \
+    http://127.0.0.1:8000/books
+    
+    # Get the books
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request GET \
+    http://127.0.0.1:8000/books
+    
+    # Edit the book information
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request PATCH \
+    --data '{"description":"no description"}' \
+    http://127.0.0.1:8000/books/51
+    
+    # Delete the book
+
+    curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request DELETE \
+    http://127.0.0.1:8000/books/51
+    ```
+3. Authors API
+    
+    Authors API also has 4 endpoints
+
+    1. `GET /authors` : to get the list of authors record 
+    2. `POST /authors` : to create a new author
+    3. `PUT /authors/[id]` : to update the author record
+    4. `DELETE /authors/[id]` : to remove the author record
+
+    Example curl request :
+
+    ```
+    # Create a new authors
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request POST \
+    --data '{"name":"John Doe","bio":"-","birth_date":"2000-01-01"}' \
+    http://127.0.0.1:8000/authors
+        
+    # Get the authors
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request GET \
+    http://127.0.0.1:8000/authors
+        
+    # Edit the author data
+
+    > curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request PATCH \
+    --data '{"bio":"Author description"}' \
+    http://127.0.0.1:8000/authors/11
+        
+    # Delete the author
+
+    curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request DELETE \
+    http://127.0.0.1:8000/authors/11
+    ```
+4. Unit Test
+
+    In order to ensure the API endpoint can handle the request properly, this app also has 2 simple unit test. Run this command below :
+
+    `> php artisan test`
+
+    and we can see the test result
+    ```
+    user@computer-name:/var/www/html/lms$ php artisan test
+
+    PASS  Tests\Unit\AuthorsApiTest
+    ✓ create author 0.19s  
+    ✓ get all authors 0.05s  
+    ✓ update author 0.04s  
+    ✓ delete author 0.03s  
+
+    PASS  Tests\Unit\BooksApiTest
+    ✓ create book 0.05s  
+    ✓ get all books 0.05s  
+    ✓ update book 0.04s  
+    ✓ delete book 0.04s  
+
+    Tests:    8 passed (30 assertions)
+    Duration: 0.60s
+    ```
+5. Code Quality Check
+
+    This is a process of testing the code quality of the Laravel-based LMS API application using PHP CodeSniffer (PHPCS) and PHPStan. These tools help ensure code consistency, maintainability, and adherence to coding standards.
+
+    Run `> composer quality-check` in terminal to get the report, e.g
+
+    ```
+    user@computer-name:/var/www/html/lms$ composer quality-check
+
+    > ./vendor/bin/phpcs && ./vendor/bin/phpstan analyse --memory-limit=-1
+
+    Note: Using configuration file /var/www/html/lms/phpstan.neon.
+    19/19 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+                
+    [OK] No errors
+    ```                                                       
 
