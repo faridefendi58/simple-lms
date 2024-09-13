@@ -15,8 +15,8 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login')
 Route::middleware('auth:sanctum')->group(function () {
     // routing for books
     Route::resource('books', BookController::class)
-        ->only(['index', 'store', 'update', 'destroy']);
+        ->only(['index', 'show', 'store', 'update', 'destroy']);
     // routing for authors
     Route::resource('authors', AuthorController::class)
-        ->only(['index', 'store', 'update', 'destroy']);
+        ->only(['index', 'show', 'store', 'update', 'destroy']);
 });

@@ -93,7 +93,8 @@ This section provides a comprehensive guide on how to use the Laravel-based fron
     1. `GET /books` : to get the list of books record 
     2. `POST /books` : to create a new book
     3. `PUT /books/[id]` : to update the book record
-    4. `DELETE /books/[id]` : to remove the book record
+    4. `GET /books/[id]` : to get the detail a book
+    5. `DELETE /books/[id]` : to remove the book record
 
     Example curl request :
 
@@ -127,6 +128,13 @@ This section provides a comprehensive guide on how to use the Laravel-based fron
     --request PATCH \
     --data '{"description":"no description"}' \
     http://127.0.0.1:8000/books/51
+
+    #Get detail book
+
+    curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request GET \
+    http://127.0.0.1:8000/books/51
     
     # Delete the book
 
@@ -142,7 +150,8 @@ This section provides a comprehensive guide on how to use the Laravel-based fron
     1. `GET /authors` : to get the list of authors record 
     2. `POST /authors` : to create a new author
     3. `PUT /authors/[id]` : to update the author record
-    4. `DELETE /authors/[id]` : to remove the author record
+    4. `GET /authos/[id]` : to get the detail author
+    5. `DELETE /authors/[id]` : to remove the author record
 
     Example curl request :
 
@@ -168,6 +177,13 @@ This section provides a comprehensive guide on how to use the Laravel-based fron
     --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
     --request PATCH \
     --data '{"bio":"Author description"}' \
+    http://127.0.0.1:8000/authors/11
+
+    #Get detail author
+
+    curl --header "Content-Type: application/json" \
+    --header "Authorization: Bearer 1|LFlGNYZR5pNL3eJPxM5KHK91PK18M2KWKh4nc0zLf47924a5" \
+    --request GET \
     http://127.0.0.1:8000/authors/11
         
     # Delete the author
