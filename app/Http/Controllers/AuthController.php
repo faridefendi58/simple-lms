@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -41,11 +42,17 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
-            $token = null;
-            if ($user) {
-                $token = $user->createToken($user->email)->plainTextToken;
-            }
+            $email = is_scalar($request->email) ? $request->email : '';
+            // provide token to user with cache
+            $token = Cache::remember(
+                "token_ {$email}",
+                3600,
+                function () use ($email) {
+                    $user = User::where('email', $email)->first();
+                    return $user ?
+                        $user->createToken('auth_token')->plainTextToken : null;
+                }
+            );
 
             return response()->json([
                 'status' => true,
